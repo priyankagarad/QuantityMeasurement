@@ -1,4 +1,5 @@
 package com.bl.demo.controller;
+import com.bl.demo.dto.ConversionDto;
 import com.bl.demo.service.IQuantityConversionService;
 import com.bl.demo.service.Quantity;
 import com.bl.demo.service.QuantityUnits;
@@ -14,8 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import java.util.ArrayList;
 import java.util.List;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -45,7 +48,6 @@ public class QuantityConversionApplicationTests {
                 .andReturn();
         String quantitiesJson = mvcResult.getResponse().getContentAsString();
         Quantity[] quantities = objectMapper.readValue(quantitiesJson, Quantity[].class);
-        System.out.println(quantities[0]);
         Assert.assertEquals(2, quantities.length);
     }
 
@@ -58,5 +60,19 @@ public class QuantityConversionApplicationTests {
         String quantitiesJson = mvcResult.getResponse().getContentAsString();
         QuantityUnits[] quantityUnits = objectMapper.readValue(quantitiesJson, QuantityUnits[].class);
         Assert.assertEquals(3, quantityUnits.length);
+    }
+
+    @Test
+    void whenGiven2Feet_isExpectedInch_shouldReturn24Inch() throws Exception {
+        ConversionDto conversionDto = new ConversionDto(2.0, QuantityUnits.FEET);
+        String conversionDtoJson = objectMapper.writeValueAsString(conversionDto);
+        when(quantityConversionService.convertQuantityToUnit(any(), any()))
+                .thenReturn(conversionDto.value);
+        MvcResult mvcResult = this.mockMvc.perform(post("/quantity/conversion/INCH")
+                .content(conversionDtoJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        String quantityResult = mvcResult.getResponse().getContentAsString();
+        Assert.assertEquals(String.valueOf(conversionDto.value), quantityResult);
     }
 }

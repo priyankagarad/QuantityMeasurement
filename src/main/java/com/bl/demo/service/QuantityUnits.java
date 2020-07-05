@@ -6,7 +6,9 @@ public enum QuantityUnits {
     YARD(36.0,LENGTH),CM(0.4,LENGTH),
 
     ML(0.001,VOLUME),LITRE(1,VOLUME),
-    GALLON(3.78,VOLUME);
+    GALLON(3.78,VOLUME),
+
+    FAHRENHEIT(1.0, TEMPERATURE), CELSIUS(1.0,TEMPERATURE);
 
     double baseUnitConversion;
     Quantity quantity;
@@ -15,5 +17,4 @@ public enum QuantityUnits {
         this.baseUnitConversion=baseUnitConversion;
         this.quantity=quantity;
     }
-
 }
