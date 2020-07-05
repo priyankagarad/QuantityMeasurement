@@ -26,11 +26,15 @@ public class QuantityConversionApplicationTests {
     @MockBean
     IQuantityConversionService quantityConversionService;
     List<Quantity> quantityList=new ArrayList<>();
+    List<QuantityUnits> quantityUnitsList = new ArrayList<>();
     ObjectMapper objectMapper=new ObjectMapper();
 
     public QuantityConversionApplicationTests() {
         this.quantityList.add(Quantity.VOLUME);
         this.quantityList.add(Quantity.LENGTH);
+        this.quantityUnitsList.add(QuantityUnits.INCH);
+        this.quantityUnitsList.add(QuantityUnits.CM);
+        this.quantityUnitsList.add(QuantityUnits.FEET);
     }
 
     @Test
@@ -43,5 +47,16 @@ public class QuantityConversionApplicationTests {
         Quantity[] quantities = objectMapper.readValue(quantitiesJson, Quantity[].class);
         System.out.println(quantities[0]);
         Assert.assertEquals(2, quantities.length);
+    }
+
+    @Test
+    void givenQuantityUnits_whenSelect_shouldReturnListOfQuantityUnits() throws Exception {
+        when(quantityConversionService.getListOfQuantityUnits(Quantity.LENGTH)).thenReturn(this.quantityUnitsList);
+        MvcResult mvcResult = this.mockMvc.perform(get("/quantity/LENGTH")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        String quantitiesJson = mvcResult.getResponse().getContentAsString();
+        QuantityUnits[] quantityUnits = objectMapper.readValue(quantitiesJson, QuantityUnits[].class);
+        Assert.assertEquals(3, quantityUnits.length);
     }
 }

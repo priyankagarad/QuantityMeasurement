@@ -11,4 +11,8 @@ public class QuantityConversionService implements IQuantityConversionService {
     public List<Quantity> getListOfQuantity() {
         return Arrays.stream(Quantity.values()).collect(Collectors.toList());
     }
+
+    public List<QuantityUnits> getListOfQuantityUnits(Quantity quantity) {
+        return Arrays.stream(QuantityUnits.values()).filter(qUnit -> qUnit.quantity.equals(quantity)).collect(Collectors.toList());
+    }
 }

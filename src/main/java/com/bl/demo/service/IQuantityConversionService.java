@@ -3,5 +3,5 @@ import java.util.List;
 
 public interface IQuantityConversionService {
     public List<Quantity> getListOfQuantity();
-
+    public List<QuantityUnits> getListOfQuantityUnits(Quantity quantity);
 }
