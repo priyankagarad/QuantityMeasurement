@@ -1,8 +1,6 @@
 package com.bl.demo.service;
 import com.bl.demo.dto.ConversionDto;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,12 +11,15 @@ public class QuantityConversionService implements IQuantityConversionService {
 
     @Override
     public List<Quantity> getListOfQuantity() {
-        return Arrays.stream(Quantity.values()).collect(Collectors.toList());
+        return Arrays.stream(Quantity.values())
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<QuantityUnits> getListOfQuantityUnits(Quantity quantity) {
-        return Arrays.stream(QuantityUnits.values()).filter(qUnit -> qUnit.quantity.equals(quantity)).collect(Collectors.toList());
+        return Arrays.stream(QuantityUnits.values())
+                .filter(qUnit -> qUnit.quantity.equals(quantity))
+                .collect(Collectors.toList());
     }
 
     private static double farenheitToCelcius(double fahrenheit){
