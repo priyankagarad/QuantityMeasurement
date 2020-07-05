@@ -13,7 +13,6 @@ public enum QuantityUnits {
     GRAM(0.001, WEIGHT), KG(1.0, WEIGHT),
     TONNE(1000.0, WEIGHT);
 
-
     double baseUnitConversion;
     Quantity quantity;
 
