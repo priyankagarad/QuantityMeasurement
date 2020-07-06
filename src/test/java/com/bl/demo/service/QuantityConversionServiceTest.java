@@ -18,4 +18,5 @@ public class QuantityConversionServiceTest {
         int size = quantityConversionService.getListOfQuantity().size();
         Assert.assertEquals(4,size);
     }
+
 }

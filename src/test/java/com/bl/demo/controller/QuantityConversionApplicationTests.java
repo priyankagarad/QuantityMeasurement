@@ -3,6 +3,7 @@ import com.bl.demo.dto.ConversionDto;
 import com.bl.demo.service.IQuantityConversionService;
 import com.bl.demo.enumeration.Quantity;
 import com.bl.demo.enumeration.QuantityUnits;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class QuantityConversionApplicationTests {
     List<QuantityUnits> quantityUnitsList = new ArrayList<>();
     ObjectMapper objectMapper=new ObjectMapper();
 
-    public void setUp(){
+    public  QuantityConversionApplicationTests(){
         this.quantityList.add(Quantity.VOLUME);
         this.quantityList.add(Quantity.LENGTH);
         this.quantityUnitsList.add(QuantityUnits.INCH);
@@ -43,7 +44,7 @@ public class QuantityConversionApplicationTests {
     @Test
     public void givenQuantity_whenSelect_shouldReturnListOfQuantity() throws Exception {
         when(quantityConversionService.getListOfQuantity()).thenReturn(this.quantityList);
-        MvcResult mvcResult = this.mockMvc.perform(get("/quantity")
+        MvcResult mvcResult = this.mockMvc.perform(get("/unit/quantity")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         String quantitiesJson = mvcResult.getResponse().getContentAsString();
@@ -54,7 +55,7 @@ public class QuantityConversionApplicationTests {
     @Test
     public void givenQuantityUnits_whenSelect_shouldReturnListOfQuantityUnits() throws Exception {
         when(quantityConversionService.getListOfQuantityUnits(Quantity.LENGTH)).thenReturn(this.quantityUnitsList);
-        MvcResult mvcResult = this.mockMvc.perform(get("/quantity/LENGTH")
+        MvcResult mvcResult = this.mockMvc.perform(get("/unit/quantity/LENGTH")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
         String quantitiesJson = mvcResult.getResponse().getContentAsString();
@@ -68,7 +69,7 @@ public class QuantityConversionApplicationTests {
         String conversionDtoJson = objectMapper.writeValueAsString(conversionDto);
         when(quantityConversionService.convertQuantityToUnit(any(), any()))
                 .thenReturn(conversionDto.value);
-        MvcResult mvcResult = this.mockMvc.perform(post("/quantity/conversion/INCH")
+        MvcResult mvcResult = this.mockMvc.perform(post("/unit/quantity/conversion/INCH")
                 .content(conversionDtoJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -77,12 +78,12 @@ public class QuantityConversionApplicationTests {
     }
 
     @Test
-    public void given2Inchvalue_whenConvertIntoFeet_shouldReturn2Inch() throws Exception {
+    public void given2Inchvalue_whenConvertIntoFeet_shouldReturn2Feet() throws Exception {
         ConversionDto conversionDto = new ConversionDto(2.0, QuantityUnits.INCH);
         String conversionDtoJson = objectMapper.writeValueAsString(conversionDto);
         when(quantityConversionService.convertQuantityToUnit(any(), any()))
                 .thenReturn(conversionDto.value);
-        MvcResult mvcResult = this.mockMvc.perform(post("/quantity/conversion/INCH")
+        MvcResult mvcResult = this.mockMvc.perform(post("/unit/quantity/conversion/FEET")
                 .content(conversionDtoJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -92,11 +93,11 @@ public class QuantityConversionApplicationTests {
 
     @Test
     public void given1Feetvalue_whenConvertIntoYard_shouldReturnYard() throws Exception {
-        ConversionDto conversionDto = new ConversionDto(1.0, QuantityUnits.INCH);
+        ConversionDto conversionDto = new ConversionDto(1.0, QuantityUnits.FEET);
         String conversionDtoJson = objectMapper.writeValueAsString(conversionDto);
         when(quantityConversionService.convertQuantityToUnit(any(), any()))
                 .thenReturn(conversionDto.value);
-        MvcResult mvcResult = this.mockMvc.perform(post("/quantity/conversion/INCH")
+        MvcResult mvcResult = this.mockMvc.perform(post("/unit/quantity/conversion/YARD")
                 .content(conversionDtoJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
