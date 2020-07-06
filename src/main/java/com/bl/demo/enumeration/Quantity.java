@@ -1,4 +1,4 @@
-package com.bl.demo.service;
+package com.bl.demo.enumeration;
 
 public enum Quantity {
     LENGTH,

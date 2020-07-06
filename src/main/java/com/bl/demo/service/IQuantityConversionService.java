@@ -1,5 +1,8 @@
 package com.bl.demo.service;
 import com.bl.demo.dto.ConversionDto;
+import com.bl.demo.enumeration.Quantity;
+import com.bl.demo.enumeration.QuantityUnits;
+
 import java.util.List;
 
 public interface IQuantityConversionService {

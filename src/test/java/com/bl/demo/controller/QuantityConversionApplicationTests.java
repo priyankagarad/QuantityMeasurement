@@ -1,8 +1,8 @@
 package com.bl.demo.controller;
 import com.bl.demo.dto.ConversionDto;
 import com.bl.demo.service.IQuantityConversionService;
-import com.bl.demo.service.Quantity;
-import com.bl.demo.service.QuantityUnits;
+import com.bl.demo.enumeration.Quantity;
+import com.bl.demo.enumeration.QuantityUnits;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ public class QuantityConversionApplicationTests {
     List<QuantityUnits> quantityUnitsList = new ArrayList<>();
     ObjectMapper objectMapper=new ObjectMapper();
 
-    public QuantityConversionApplicationTests() {
+    public void setUp(){
         this.quantityList.add(Quantity.VOLUME);
         this.quantityList.add(Quantity.LENGTH);
         this.quantityUnitsList.add(QuantityUnits.INCH);
@@ -52,7 +52,7 @@ public class QuantityConversionApplicationTests {
     }
 
     @Test
-    void givenQuantityUnits_whenSelect_shouldReturnListOfQuantityUnits() throws Exception {
+    public void givenQuantityUnits_whenSelect_shouldReturnListOfQuantityUnits() throws Exception {
         when(quantityConversionService.getListOfQuantityUnits(Quantity.LENGTH)).thenReturn(this.quantityUnitsList);
         MvcResult mvcResult = this.mockMvc.perform(get("/quantity/LENGTH")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -63,7 +63,7 @@ public class QuantityConversionApplicationTests {
     }
 
     @Test
-    void given2Feetvalue_whenConverIntoInch_shouldReturn24Inch() throws Exception {
+    public void given2Feetvalue_whenConvertIntoInch_shouldReturn24Inch() throws Exception {
         ConversionDto conversionDto = new ConversionDto(2.0, QuantityUnits.FEET);
         String conversionDtoJson = objectMapper.writeValueAsString(conversionDto);
         when(quantityConversionService.convertQuantityToUnit(any(), any()))
@@ -77,8 +77,22 @@ public class QuantityConversionApplicationTests {
     }
 
     @Test
-    void given2Inchvalue_whenConverIntoFeet_shouldReturn2Inch() throws Exception {
+    public void given2Inchvalue_whenConvertIntoFeet_shouldReturn2Inch() throws Exception {
         ConversionDto conversionDto = new ConversionDto(2.0, QuantityUnits.INCH);
+        String conversionDtoJson = objectMapper.writeValueAsString(conversionDto);
+        when(quantityConversionService.convertQuantityToUnit(any(), any()))
+                .thenReturn(conversionDto.value);
+        MvcResult mvcResult = this.mockMvc.perform(post("/quantity/conversion/INCH")
+                .content(conversionDtoJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        String quantityResult = mvcResult.getResponse().getContentAsString();
+        Assert.assertEquals(String.valueOf(conversionDto.value), quantityResult);
+    }
+
+    @Test
+    public void given1Feetvalue_whenConvertIntoYard_shouldReturnYard() throws Exception {
+        ConversionDto conversionDto = new ConversionDto(1.0, QuantityUnits.INCH);
         String conversionDtoJson = objectMapper.writeValueAsString(conversionDto);
         when(quantityConversionService.convertQuantityToUnit(any(), any()))
                 .thenReturn(conversionDto.value);

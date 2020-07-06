@@ -1,5 +1,6 @@
 package com.bl.demo.dto;
-import com.bl.demo.service.QuantityUnits;
+
+import com.bl.demo.enumeration.QuantityUnits;
 
 public class ConversionDto {
     public Double value;

@@ -1,10 +1,12 @@
 package com.bl.demo.service;
 import com.bl.demo.dto.ConversionDto;
+import com.bl.demo.enumeration.Quantity;
+import com.bl.demo.enumeration.QuantityUnits;
 import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import static com.bl.demo.service.Quantity.TEMPERATURE;
+import static com.bl.demo.enumeration.Quantity.TEMPERATURE;
 
 @Service
 public class QuantityConversionService implements IQuantityConversionService {
@@ -30,18 +32,20 @@ public class QuantityConversionService implements IQuantityConversionService {
         return ((celcius*(9.0/5.0)) + 32);
     }
 
+    @Override
     public Double convertQuantityToUnit(ConversionDto conversionDto, QuantityUnits quantityUnits) {
         try {
-            if (conversionDto.quantityUnits.quantity.equals(TEMPERATURE)) {
-                if (conversionDto.quantityUnits.equals(QuantityUnits.FAHRENHEIT) && quantityUnits.equals(QuantityUnits.CELSIUS)) {
+            if(conversionDto.quantityUnits.quantity.equals(TEMPERATURE)) {
+                if(conversionDto.quantityUnits.equals(QuantityUnits.FAHRENHEIT) && quantityUnits.equals(QuantityUnits.CELSIUS)) {
                     return farenheitToCelcius(conversionDto.value);
-                } else if (conversionDto.quantityUnits.equals(QuantityUnits.CELSIUS) && quantityUnits.equals(QuantityUnits.FAHRENHEIT)) {
+                }
+                else if(conversionDto.quantityUnits.equals(QuantityUnits.CELSIUS) && quantityUnits.equals(QuantityUnits.FAHRENHEIT)) {
                     return celciusToFarenheit(conversionDto.value);
-                } else {
+                }
+                else {
                     return conversionDto.value;
                 }
             }
-
             double result = (conversionDto.value * conversionDto.quantityUnits.baseUnitConversion) / quantityUnits.baseUnitConversion;
             return result;
         } catch (NullPointerException e) {
