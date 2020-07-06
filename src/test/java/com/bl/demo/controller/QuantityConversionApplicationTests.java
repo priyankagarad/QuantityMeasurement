@@ -119,4 +119,18 @@ public class QuantityConversionApplicationTests {
         Assert.assertEquals(String.valueOf(conversionDto.value), quantityResult);
     }
 
+    @Test
+    public void given2Litrelvalue_whenConvertIntoMililitre_shouldReturnMililitreValue() throws Exception {
+        ConversionDto conversionDto = new ConversionDto(2.0, QuantityUnits.LITRE);
+        String conversionDtoJson = objectMapper.writeValueAsString(conversionDto);
+        when(quantityConversionService.convertQuantityToUnit(any(), any()))
+                .thenReturn(conversionDto.value);
+        MvcResult mvcResult = this.mockMvc.perform(post("/unit/quantity/conversion/ML")
+                .content(conversionDtoJson)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        String quantityResult = mvcResult.getResponse().getContentAsString();
+        Assert.assertEquals(String.valueOf(conversionDto.value), quantityResult);
+    }
+
 }
